@@ -1,0 +1,11 @@
+{
+  "name": "gold-miner",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check:syntax": "node --check game.js && node --check audio.js && find src tests/unit -type f \\( -name '*.js' -o -name '*.mjs' \\) -print0 | xargs -0 -n1 node --check",
+    "test": "node --test tests/unit/*.test.mjs",
+    "verify": "npm run check:syntax && npm test"
+  }
+}

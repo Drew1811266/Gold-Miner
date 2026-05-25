@@ -1,0 +1,11 @@
+.DS_Store
+.codex/
+.playwright-mcp/
+dist/
+output/
+tmp/
+node_modules/
+coverage/
+*.log
+body-text.txt
+gold-miner-seed-*.png

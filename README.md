@@ -1,18 +1,18 @@
-[README.md](https://github.com/user-attachments/files/25754940/README.md)
 # 黄金矿工（HTML5 Canvas）
 
 一个可离线运行的「黄金矿工」玩法原型：钩子摆动 → 放钩子 → 抓取物品 → 拉回计分 → 倒计时结束结算过关/失败。
 
-![黄金矿工游戏界面截图](./Gold%20Miner/assets/screenshots/gameplay.png)
+![黄金矿工游戏界面截图](./assets/screenshots/gameplay.png)
 
 ## 运行方式
 
-- 直接双击打开 `index.html` 即可运行（推荐用 Chrome）。
-- 或双击 `run.command` 一键打开（macOS）。
+- 双击 `run.command` 一键启动本地服务器并打开游戏（macOS）。
 - 或在终端启动（macOS/Linux）：`./start.sh`
-- 若你习惯用本地服务器，也可以自己起一个（端口任选）：
-  - `python3 -m http.server 5173`
-  - 然后打开 `http://localhost:5173/`
+- 或手动启动本地服务器：
+  - `python3 -m http.server 5173 --bind 127.0.0.1`
+  - 然后打开 `http://127.0.0.1:5173/`
+
+说明：当前入口使用 ES module（`src/main.js`），建议通过本地服务器运行。直接双击 `index.html` 在部分浏览器会因为 `file://` module 限制而无法加载。
 
 ## 操作
 
@@ -37,6 +37,12 @@
 说明：
 - 默认是**未签名**应用，分发到其他 Mac 可能会被 Gatekeeper 拦截；可在 Finder 里右键 App → 打开。
 - 如需正式分发（避免拦截），需要使用 Developer ID 证书进行 `codesign` 并 `notarytool` 公证。
+
+## 验证
+
+- 单元测试与语法检查：`npm run verify`
+- macOS 打包检查：`./macos/build.command`
+- 浏览器冒烟清单：[docs/testing/browser-smoke.md](docs/testing/browser-smoke.md)
 
 ## 机制补充
 
