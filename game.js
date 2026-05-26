@@ -1701,20 +1701,27 @@ function initBackgrounds() {
 }
 
 function initCrayonArt() {
+  crayonArtRegistry = null;
   if (!GoldMinerModules.createCrayonArtRegistry || typeof Image !== "function") {
     window.__goldMinerCrayonArtStatus = { total: 0, loaded: 0, failed: 0, skipped: true };
     return;
   }
 
-  crayonArtRegistry = GoldMinerModules.createCrayonArtRegistry({ ImageCtor: Image });
-  window.__goldMinerCrayonArtStatus = crayonArtRegistry.summary();
-  crayonArtRegistry.preload().then(() => render())
-    .catch((error) => {
-      window.__goldMinerCrayonArtError = error instanceof Error ? error.message : String(error);
-    })
-    .finally(() => {
-      window.__goldMinerCrayonArtStatus = crayonArtRegistry?.summary() ?? { total: 0, loaded: 0, failed: 0 };
-    });
+  try {
+    crayonArtRegistry = GoldMinerModules.createCrayonArtRegistry({ ImageCtor: Image });
+    window.__goldMinerCrayonArtStatus = crayonArtRegistry.summary();
+    crayonArtRegistry.preload().then(() => render())
+      .catch((error) => {
+        window.__goldMinerCrayonArtError = error instanceof Error ? error.message : String(error);
+      })
+      .finally(() => {
+        window.__goldMinerCrayonArtStatus = crayonArtRegistry?.summary() ?? { total: 0, loaded: 0, failed: 0 };
+      });
+  } catch (error) {
+    crayonArtRegistry = null;
+    window.__goldMinerCrayonArtError = error instanceof Error ? error.message : String(error);
+    window.__goldMinerCrayonArtStatus = { total: 0, loaded: 0, failed: 0, skipped: true };
+  }
 }
 
 function crayonArtAssets() {

@@ -1675,16 +1675,25 @@ test("game input surfaces dispatch command objects", () => {
 
 test("game preloads crayon art assets without coupling gameplay state to asset loading", () => {
   const source = read("game.js");
+  const initBody = extractFunctionBody(source, "initCrayonArt");
+  const bootBody = extractFunctionBody(source, "boot");
 
   assert.match(source, /let crayonArtRegistry = null;/);
   assert.match(source, /function initCrayonArt\(\)/);
-  assert.match(source, /GoldMinerModules\.createCrayonArtRegistry\(\{ ImageCtor: Image \}\)/);
-  assert.match(source, /crayonArtRegistry\.preload\(\)\.then\(\(\) => render\(\)\)/);
-  assert.match(source, /window\.__goldMinerCrayonArtStatus =/);
+  assert.match(initBody, /crayonArtRegistry = null;/);
+  assert.match(initBody, /if \(!GoldMinerModules\.createCrayonArtRegistry \|\| typeof Image !== "function"\)/);
+  assert.match(initBody, /try \{/);
+  assert.match(initBody, /catch \(error\) \{/);
+  assert.match(initBody, /GoldMinerModules\.createCrayonArtRegistry\(\{ ImageCtor: Image \}\)/);
+  assert.match(initBody, /crayonArtRegistry\.preload\(\)/);
+  assert.match(initBody, /render\(\)/);
+  assert.match(initBody, /window\.__goldMinerCrayonArtStatus =/);
+  assert.match(initBody, /window\.__goldMinerCrayonArtError =/);
   assert.match(source, /function crayonArtAssets\(\)/);
-  assert.match(source, /initCrayonArt\(\);/);
+  assert.equal(countMatches(source, /artAssets: crayonArtAssets\(\)/g), 5);
+  assert.match(bootBody, /initCrayonArt\(\);/);
   assert.ok(
-    source.indexOf("initCrayonArt();") > source.indexOf("initBackgrounds();"),
+    bootBody.indexOf("initCrayonArt();") > bootBody.indexOf("initBackgrounds();"),
     "crayon art preload should start after existing background setup",
   );
 });
