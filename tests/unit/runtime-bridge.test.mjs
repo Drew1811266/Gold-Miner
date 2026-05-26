@@ -54,6 +54,11 @@ const EXPECTED_GOLD_MINER_MODULE_KEYS = [
   "applyFxEvents",
   "applyEventsWithFallback",
   "createPlayerRenderOrder",
+  "CRAYON_ART_ASSETS",
+  "CRAYON_ART_BASE_PATH",
+  "createCrayonArtRegistry",
+  "drawCrayonImageAsset",
+  "getCrayonItemAssetKey",
   "createSceneData",
   "createRenderSnapshot",
   "renderFrameWithLayers",
@@ -236,6 +241,11 @@ test("runtime bridge exports and installs the expected namespace", async () => {
     assert.equal(typeof modules.drawMinerBackLayer, "function");
     assert.equal(typeof modules.drawMinerFrontLayer, "function");
     assert.equal(typeof modules.drawFxLayer, "function");
+    assert.equal(modules.CRAYON_ART_BASE_PATH, "./assets/art/crayon/");
+    assert.equal(Array.isArray(modules.CRAYON_ART_ASSETS), true);
+    assert.equal(typeof modules.createCrayonArtRegistry, "function");
+    assert.equal(typeof modules.drawCrayonImageAsset, "function");
+    assert.equal(modules.getCrayonItemAssetKey({ type: "gold" }), "sprite.gold");
     assert.equal(typeof modules.updateFxState, "function");
     assert.equal(bridge.updateFxState, modules.updateFxState);
     assert.equal(typeof modules.getHookDir, "function");

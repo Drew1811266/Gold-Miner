@@ -98,6 +98,13 @@ import { createMinerPose, drawMinerBackLayer, drawMinerFrontLayer } from "../ren
 import { drawFxLayer } from "../render/fxRenderer.js";
 import { createSceneData } from "../render/sceneSystem.js";
 import { createRenderSnapshot } from "../render/renderSnapshot.js";
+import {
+  CRAYON_ART_ASSETS,
+  CRAYON_ART_BASE_PATH,
+  createCrayonArtRegistry,
+  drawCrayonImageAsset,
+  getCrayonItemAssetKey,
+} from "../render/crayonArtAssets.js";
 import { applyEventsWithFallback } from "./eventApplication.js";
 import {
   canFireHook,
@@ -179,6 +186,13 @@ export {
   updateHookSwingState,
   updateHookTrailState,
 };
+export {
+  CRAYON_ART_ASSETS,
+  CRAYON_ART_BASE_PATH,
+  createCrayonArtRegistry,
+  drawCrayonImageAsset,
+  getCrayonItemAssetKey,
+};
 
 const MARKET_COMMODITIES = Object.freeze(
   SOURCE_MARKET_COMMODITIES.map((commodity) => Object.freeze({ ...commodity })),
@@ -232,6 +246,11 @@ export const GoldMinerModules = Object.freeze({
   applyFxEvents,
   applyEventsWithFallback,
   createPlayerRenderOrder,
+  CRAYON_ART_ASSETS,
+  CRAYON_ART_BASE_PATH,
+  createCrayonArtRegistry,
+  drawCrayonImageAsset,
+  getCrayonItemAssetKey,
   createSceneData,
   createRenderSnapshot,
   renderFrameWithLayers,
