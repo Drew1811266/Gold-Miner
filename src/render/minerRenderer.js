@@ -41,6 +41,7 @@ function validateCtx(ctx, ownerName) {
     "lineTo",
     "quadraticCurveTo",
     "fillRect",
+    "drawImage",
     "arcTo",
     "closePath",
     "createLinearGradient",

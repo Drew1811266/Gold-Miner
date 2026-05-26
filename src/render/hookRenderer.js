@@ -43,6 +43,7 @@ function validateCtx(ctx) {
     "stroke",
     "translate",
     "rotate",
+    "drawImage",
     "createLinearGradient",
     "createRadialGradient",
     "setLineDash",

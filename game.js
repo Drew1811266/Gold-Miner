@@ -1728,6 +1728,13 @@ function crayonArtAssets() {
   return crayonArtRegistry;
 }
 
+function drawHostCrayonImageAsset(drawCtx, artAssets, key, x, y, width, height) {
+  const asset = artAssets?.get?.(key);
+  if (!asset || asset.status !== "loaded" || !asset.image || typeof drawCtx?.drawImage !== "function") return false;
+  drawCtx.drawImage(asset.image, x, y, width, height);
+  return true;
+}
+
 const COLORS = {
   skyTop: "#0f1731",
   skyBottom: "#070a13",
@@ -6214,6 +6221,9 @@ function drawMinerBackWithLocalLayer(options = minerLayerOptions()) {
     ctx.restore();
   }
 
+  drawHostCrayonImageAsset(ctx, options.artAssets, "sprite.minerBody", x - 36, y - 18, 72, 104);
+  drawHostCrayonImageAsset(ctx, options.artAssets, "sprite.minerHead", x - 27, y - 31, 54, 54);
+
   // Backpack
   ctx.save();
   try {
@@ -6589,7 +6599,7 @@ function drawMinerBack(hook = game.hook, miner = game.miner) {
   if (!minerLayerBridgeDisabled && GoldMinerModules.createMinerPose && GoldMinerModules.drawMinerBackLayer) {
     try {
       const pose = GoldMinerModules.createMinerPose(options);
-      return GoldMinerModules.drawMinerBackLayer({ ctx: options.ctx, pose });
+      return GoldMinerModules.drawMinerBackLayer({ ctx: options.ctx, pose, artAssets: options.artAssets });
     } catch (error) {
       noteMinerRendererError(error);
     }

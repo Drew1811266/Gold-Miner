@@ -293,6 +293,9 @@ test("drawHookLayer rejects invalid structural inputs", () => {
 
   assert.throws(() => drawHookLayer(), /ctx/);
   assert.throws(() => drawHookLayer({ ...options, ctx: {} }), /ctx\.save/);
+  const ctxWithoutDrawImage = createFakeCtx();
+  delete ctxWithoutDrawImage.drawImage;
+  assert.throws(() => drawHookLayer({ ...options, ctx: ctxWithoutDrawImage }), /ctx\.drawImage/);
   assert.throws(() => drawHookLayer({ ...options, hook: { ...options.hook, length: Number.NaN } }), /hook\.length/);
   assert.throws(() => drawHookLayer({ ...options, hook: { ...options.hook, maxLength: 0 } }), /maxLength/);
   assert.throws(() => drawHookLayer({ ...options, hook: { ...options.hook, state: "" } }), /hook\.state/);

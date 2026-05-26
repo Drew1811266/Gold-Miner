@@ -33,6 +33,7 @@ function validateCtx(ctx, ownerName) {
     "lineTo",
     "rotate",
     "translate",
+    "drawImage",
     "createLinearGradient",
     "createRadialGradient",
     "arcTo",

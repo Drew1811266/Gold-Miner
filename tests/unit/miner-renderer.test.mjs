@@ -217,5 +217,8 @@ test("miner renderer rejects invalid structural inputs", () => {
   assert.throws(() => createMinerPose({ ...options, pivot: { x: 0, y: Number.POSITIVE_INFINITY } }), /pivot\.y/);
   assert.throws(() => createMinerPose({ ...options, attachedItem: { weight: Number.NaN } }), /attachedItem\.weight/);
   assert.throws(() => drawMinerBackLayer({ ctx: {}, pose }), /ctx\.save/);
+  const ctxWithoutDrawImage = createFakeCtx();
+  delete ctxWithoutDrawImage.drawImage;
+  assert.throws(() => drawMinerBackLayer({ ctx: ctxWithoutDrawImage, pose }), /ctx\.drawImage/);
   assert.throws(() => drawMinerFrontLayer({ ctx: createFakeCtx(), pose: { ...pose, reel: { x: 0, y: Number.NaN } } }), /reel\.y/);
 });

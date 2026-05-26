@@ -234,6 +234,9 @@ test("drawWinchLayer restores canvas state when drawing throws", () => {
 test("winch renderer rejects invalid structural inputs", () => {
   assert.throws(() => drawReelLayer(), /ctx/);
   assert.throws(() => drawReelLayer({ ...reelOptions(), ctx: {} }), /ctx\.save/);
+  const ctxWithoutDrawImage = createFakeCtx();
+  delete ctxWithoutDrawImage.drawImage;
+  assert.throws(() => drawReelLayer({ ...reelOptions(), ctx: ctxWithoutDrawImage }), /ctx\.drawImage/);
   assert.throws(() => drawReelLayer({ ...reelOptions(), pivot: { x: Number.NaN, y: 0 } }), /pivot\.x/);
   assert.throws(() => drawReelLayer({ ...reelOptions(), centerY: Number.POSITIVE_INFINITY }), /centerY/);
   assert.throws(() => drawReelLayer({ ...reelOptions(), hook: { reelAngle: "0", spoolSpeed: 0 } }), /reelAngle/);
