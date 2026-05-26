@@ -63,6 +63,9 @@ function createFakeCtx() {
     fillText(...args) {
       calls.push(["fillText", ...args]);
     },
+    drawImage(...args) {
+      calls.push(["drawImage", ...args]);
+    },
     createLinearGradient(...args) {
       calls.push(["createLinearGradient", ...args]);
       return createGradient(calls, "linear", args);
@@ -123,10 +126,47 @@ function draw(item, options = {}) {
     now: options.now ?? 1800,
     createRng: options.createRng ?? createRng,
     metadata: options.metadata ?? { attached: false, hookIndex: null },
+    artAssets: options.artAssets ?? null,
   });
 
   return { ctx, rngCalls, result };
 }
+
+function loadedAsset(label) {
+  return { status: "loaded", image: { label, naturalWidth: 128, naturalHeight: 128 } };
+}
+
+function registryWith(entries) {
+  return {
+    get(key) {
+      return entries[key] ?? null;
+    },
+  };
+}
+
+test("drawItemShape draws loaded crayon item sprites in the existing radius box", () => {
+  const item = {
+    id: 101,
+    type: "gold",
+    x: 90,
+    y: 110,
+    r: 22,
+    grabbed: false,
+    art: { rot: 0 },
+  };
+
+  const { ctx, result } = draw(item, {
+    artAssets: registryWith({ "sprite.gold": loadedAsset("gold") }),
+  });
+
+  assert.equal(result, true);
+  const drawCall = ctx.calls.find((call) => call[0] === "drawImage");
+  assert.equal(drawCall[1].label, "gold");
+  assert.equal(drawCall[2], -26.4);
+  assert.equal(drawCall[3], -26.4);
+  assert.equal(drawCall[4], 52.8);
+  assert.equal(drawCall[5], 52.8);
+});
 
 test("drawItemShape draws a mouse with bar cargo and keeps facing based on velocity", () => {
   const item = {

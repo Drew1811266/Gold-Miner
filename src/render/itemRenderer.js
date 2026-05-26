@@ -1,5 +1,6 @@
 import { clamp } from "../core/geometry.js";
 import { makeBlob } from "../systems/itemFactory.js";
+import { drawCrayonImageAsset, getCrayonItemAssetKey } from "./crayonArtAssets.js";
 
 function assertObject(value, name) {
   if (value === null || typeof value !== "object") {
@@ -112,7 +113,26 @@ function blobPath(ctx, blob, radius) {
   ctx.closePath();
 }
 
-export function drawItemShape({ ctx, item, metadata, now, createRng } = {}) {
+function drawCrayonItemSprite(ctx, item, artAssets) {
+  const key = getCrayonItemAssetKey(item);
+  if (!key) return false;
+  const asset = artAssets?.get?.(key);
+  const scale = item.type === "bar" ? 1.45 : item.type === "mouse" ? 1.9 : 1.2;
+  const size = item.r * 2 * scale;
+
+  if (item.type === "mouse") {
+    const vx = Number.isFinite(item.mouse?.vx) ? item.mouse.vx : 0;
+    const facing = vx >= 0 ? 1 : -1;
+    return withSaved(ctx, () => {
+      ctx.scale(facing, 1);
+      return drawCrayonImageAsset(ctx, asset, -size / 2, -size / 2, size, size);
+    });
+  }
+
+  return drawCrayonImageAsset(ctx, asset, -size / 2, -size / 2, size, size);
+}
+
+export function drawItemShape({ ctx, item, metadata, now, createRng, artAssets = null } = {}) {
   validateOptions({ ctx, item, now, createRng });
   void metadata;
 
@@ -152,6 +172,8 @@ export function drawItemShape({ ctx, item, metadata, now, createRng } = {}) {
 
     const baseRot = item.type === "mouse" ? 0 : (art.rot ?? 0);
     ctx.rotate(baseRot + wobble);
+
+    if (drawCrayonItemSprite(ctx, item, artAssets)) return true;
 
     if (item.type === "mouse") {
       const mouse = item.mouse ?? {};
