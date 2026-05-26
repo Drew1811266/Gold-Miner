@@ -95,6 +95,26 @@ function lerpVec(a, b, t) {
   return { x: lerp(a.x, b.x, t), y: lerp(a.y, b.y, t) };
 }
 
+function hasLoadedCrayonMiner(artAssets) {
+  const hasBody = artAssets?.has?.("sprite.minerBody") ?? Boolean(artAssets?.get?.("sprite.minerBody"));
+  const hasHead = artAssets?.has?.("sprite.minerHead") ?? Boolean(artAssets?.get?.("sprite.minerHead"));
+  return Boolean(hasBody && hasHead);
+}
+
+function drawCrayonMiner(ctx, pose, artAssets) {
+  const bodyAsset = artAssets?.get?.("sprite.minerBody");
+  const headAsset = artAssets?.get?.("sprite.minerHead");
+  ctx.save();
+  try {
+    ctx.filter = "saturate(0.72) contrast(1.08) sepia(0.18)";
+    const drewBody = drawCrayonImageAsset(ctx, bodyAsset, pose.x - 42, pose.y - 23, 84, 114);
+    const drewHead = drawCrayonImageAsset(ctx, headAsset, pose.x - 32, pose.y - 40, 64, 64);
+    return drewBody && drewHead;
+  } finally {
+    ctx.restore();
+  }
+}
+
 function solveElbow(sx, sy, tx, ty, l1, l2, side) {
   const dx = tx - sx;
   const dy = ty - sy;
@@ -154,6 +174,7 @@ export function drawMinerBackLayer(options = {}) {
   validatePose(pose, "drawMinerBackLayer");
 
   const { x, y, aim, crank, phase, strainBase } = pose;
+  const { artAssets = null } = options;
 
   const skinShadow = "#e0b695";
   const jacket = "#2a3f9e";
@@ -190,10 +211,9 @@ export function drawMinerBackLayer(options = {}) {
       ctx.restore();
     }
 
-    const bodyAsset = options.artAssets?.get?.("sprite.minerBody");
-    drawCrayonImageAsset(ctx, bodyAsset, x - 36, y - 18, 72, 104);
-    const headAsset = options.artAssets?.get?.("sprite.minerHead");
-    drawCrayonImageAsset(ctx, headAsset, x - 27, y - 31, 54, 54);
+    if (drawCrayonMiner(ctx, pose, artAssets)) {
+      return { drewMinerBack: true };
+    }
 
     // Backpack
     ctx.save();
@@ -454,8 +474,7 @@ export function drawMinerBackLayer(options = {}) {
       ctx.restore();
     }
 
-    drawCrayonImageAsset(ctx, bodyAsset, x - 36, y - 18, 72, 104);
-    drawCrayonImageAsset(ctx, headAsset, x - 27, y - 31, 54, 54);
+    drawCrayonMiner(ctx, pose, artAssets);
   } finally {
     ctx.restore();
   }
@@ -463,11 +482,15 @@ export function drawMinerBackLayer(options = {}) {
   return { drewMinerBack: true };
 }
 
-export function drawMinerFrontLayer({ ctx, pose } = {}) {
+export function drawMinerFrontLayer({ ctx, pose, artAssets = null } = {}) {
   validateCtx(ctx, "drawMinerFrontLayer");
   validatePose(pose, "drawMinerFrontLayer");
 
   const { x, y, reel, crank, phase, strainBase, grip, releasePop } = pose;
+
+  if (hasLoadedCrayonMiner(artAssets)) {
+    return { drewMinerFront: true };
+  }
 
   const sleeve = "#2a3f9e";
   const sleeveHi = "rgba(255,255,255,0.12)";

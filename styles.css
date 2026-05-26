@@ -26,6 +26,9 @@ body {
 
 body {
   margin: 0;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans",
     "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
   background:
@@ -239,7 +242,8 @@ body {
 }
 
 .stage {
-  height: calc(100% - 64px);
+  flex: 1;
+  min-height: 0;
   display: grid;
   place-items: center;
   padding: 16px;
@@ -378,7 +382,7 @@ canvas {
 
 .shopOwned {
   font-size: 12px;
-  color: rgba(44, 33, 24, 0.58);
+  color: var(--ink-soft);
 }
 
 .shopFoot {

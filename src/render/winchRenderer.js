@@ -96,7 +96,8 @@ export function drawReelLayer(options = {}) {
   ctx.save();
   try {
     ctx.translate(pivot.x, centerY);
-    drawCrayonImageAsset(ctx, artAssets?.get?.("sprite.winchReel"), -20, -20, 40, 40);
+    const crayonReel = artAssets?.get?.("sprite.winchReel");
+    const drewCrayonReel = drawCrayonImageAsset(ctx, crayonReel, -24, -24, 48, 48);
 
     if (blur > 0.001) {
       ctx.save();
@@ -122,6 +123,10 @@ export function drawReelLayer(options = {}) {
       } finally {
         ctx.restore();
       }
+    }
+
+    if (drewCrayonReel) {
+      return { drewReel: true };
     }
 
     ctx.fillStyle = "rgba(0,0,0,0.35)";
@@ -197,7 +202,6 @@ export function drawReelLayer(options = {}) {
     ctx.arc(rOuter - 1, 1, 1.3, 0, Math.PI * 2);
     ctx.fill();
 
-    drawCrayonImageAsset(ctx, artAssets?.get?.("sprite.winchReel"), -20, -20, 40, 40);
   } finally {
     ctx.restore();
   }
@@ -222,7 +226,12 @@ export function drawWinchLayer(options = {}) {
       ctx.restore();
     }
 
-    drawCrayonImageAsset(ctx, artAssets?.get?.("sprite.winchPlate"), reel.x - 42, plankY - 29, 84, 34);
+    const drewCrayonPlate = drawCrayonImageAsset(ctx, artAssets?.get?.("sprite.winchPlate"), reel.x - 48, plankY - 35, 96, 44);
+    const hasCrayonReel = artAssets?.has?.("sprite.winchReel") ?? Boolean(artAssets?.get?.("sprite.winchReel"));
+    if (drewCrayonPlate && hasCrayonReel) {
+      drawReelLayer({ ctx, pivot, centerY: reel.y, hook, artAssets });
+      return { drewWinch: true, drewReel: true };
+    }
 
     const plateW = 72;
     const plateH = 26;
@@ -260,7 +269,7 @@ export function drawWinchLayer(options = {}) {
     bolt(plateX + 14, plateY + plateH - 9);
     bolt(plateX + plateW - 14, plateY + plateH - 9);
 
-    drawCrayonImageAsset(ctx, artAssets?.get?.("sprite.winchPlate"), reel.x - 42, plankY - 29, 84, 34);
+    drawCrayonImageAsset(ctx, artAssets?.get?.("sprite.winchPlate"), reel.x - 48, plankY - 35, 96, 44);
     drawReelLayer({ ctx, pivot, centerY: reel.y, hook, artAssets });
   } finally {
     ctx.restore();

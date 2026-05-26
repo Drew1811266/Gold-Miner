@@ -1592,7 +1592,7 @@ Expected:
 - pause and resume work
 - console error count is 0
 
-- [ ] **Step 4: Inspect gameplay screenshot**
+- [x] **Step 4: Inspect gameplay screenshot**
 
 Capture the gameplay viewport to:
 
@@ -1607,7 +1607,7 @@ Use the Browser or Playwright screenshot tool after the smoke client has entered
 - no old glass panel styling is dominant
 - text remains readable
 
-- [ ] **Step 5: Verify shop and two-player state through debug hooks**
+- [x] **Step 5: Verify shop and two-player state through debug hooks**
 
 In the browser console or Playwright evaluation, run:
 
@@ -1626,7 +1626,7 @@ Then start a new double-player game through the overlay and press Space/Enter on
 - both hooks can leave swing state
 - no console error or warning is introduced by the crayon art registry
 
-- [ ] **Step 6: Update progress log**
+- [x] **Step 6: Update progress log**
 
 Append this entry to `progress.md`:
 
@@ -1634,7 +1634,7 @@ Append this entry to `progress.md`:
 - Visual refactor: added warm realistic storybook crayon art pack under `assets/art/crayon/`, wired optional crayon asset registry into canvas renderers, restyled UI with paper/crayon surfaces, and preserved gameplay/collision/state behavior. Verification: `npm run verify` passed; browser smoke at `http://127.0.0.1:5173/?seed=12345` passed with crayon assets loaded, gameplay input working, shop visible, two-player hooks working, and final screenshot at `output/gold-miner-crayon-final.png`.
 ```
 
-- [ ] **Step 7: Commit Task 9**
+- [x] **Step 7: Commit Task 9**
 
 Run:
 

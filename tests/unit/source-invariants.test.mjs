@@ -1706,7 +1706,14 @@ test("styles use crayon art textures and keep existing UI selectors", () => {
   assert.match(css, /url\("\.\/assets\/art\/crayon\/textures\/paper-grain\.png"\)/);
   assert.match(css, /\.chip\.bomb \.chipIcon/);
   assert.match(css, /url\("\.\/assets\/art\/crayon\/icons\/bomb\.png"\)/);
+  assert.match(css, /\.chip\.speed \.chipIcon/);
+  assert.match(css, /url\("\.\/assets\/art\/crayon\/icons\/speed\.png"\)/);
+  assert.match(css, /\.chip\.lucky \.chipIcon/);
+  assert.match(css, /url\("\.\/assets\/art\/crayon\/icons\/lucky-bag\.png"\)/);
   assert.match(css, /\.overlay/);
   assert.match(css, /\.shopItem/);
+  assert.match(css, /\.stage\s*\{[^}]*flex:\s*1;/s);
+  assert.doesNotMatch(css, /height:\s*calc\(100% - 64px\)/);
+  assert.match(css, /\.shopOwned\s*\{[^}]*color:\s*var\(--ink-soft\);/s);
   assert.match(css, /border-radius: 8px;/);
 });

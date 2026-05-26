@@ -220,7 +220,10 @@ export function drawHookLayer({
     ctx.translate(ring.x, ring.y);
     const theta = Math.atan2(dir.y, dir.x);
     ctx.rotate(theta - Math.PI / 2);
-    drawCrayonImageAsset(ctx, artAssets?.get?.("sprite.hookClaw"), -24, -6, 48, 58);
+    const drewCrayonHook = drawCrayonImageAsset(ctx, artAssets?.get?.("sprite.hookClaw"), -31, -9, 62, 70);
+    if (drewCrayonHook) {
+      return { drewHook: true };
+    }
 
     const close = clamp(hook.clawClose ?? 0, 0, 1);
     const sizeR = carriedItem ? carriedItem.r : 0;
@@ -428,7 +431,7 @@ export function drawHookLayer({
       ctx.restore();
     }
 
-    drawCrayonImageAsset(ctx, artAssets?.get?.("sprite.hookClaw"), -24, -6, 48, 58);
+    drawCrayonImageAsset(ctx, artAssets?.get?.("sprite.hookClaw"), -31, -9, 62, 70);
 
     // Tip glow while carrying (and bomb fuse hint)
     if (carriedItem && hook.state === "retract") {

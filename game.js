@@ -6617,7 +6617,7 @@ function drawMinerFront(hook = game.hook, miner = game.miner) {
   if (!minerLayerBridgeDisabled && GoldMinerModules.createMinerPose && GoldMinerModules.drawMinerFrontLayer) {
     try {
       const pose = GoldMinerModules.createMinerPose(options);
-      return GoldMinerModules.drawMinerFrontLayer({ ctx: options.ctx, pose });
+      return GoldMinerModules.drawMinerFrontLayer({ ctx: options.ctx, pose, artAssets: options.artAssets });
     } catch (error) {
       noteMinerRendererError(error);
     }
