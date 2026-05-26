@@ -45,6 +45,7 @@ function validateCtx(ctx) {
     "rotate",
     "scale",
     "fillText",
+    "drawImage",
     "createLinearGradient",
     "createRadialGradient",
   ]) {

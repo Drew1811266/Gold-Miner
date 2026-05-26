@@ -168,6 +168,52 @@ test("drawItemShape draws loaded crayon item sprites in the existing radius box"
   assert.equal(drawCall[5], 52.8);
 });
 
+test("drawItemShape falls back to procedural art when crayon item assets are unavailable", () => {
+  const item = {
+    id: 102,
+    type: "gold",
+    x: 90,
+    y: 110,
+    r: 22,
+    grabbed: true,
+    art: { rot: 0, sparkles: [] },
+  };
+
+  const { ctx, rngCalls, result } = draw(item, {
+    artAssets: registryWith({ "sprite.gold": { status: "failed", image: { label: "failed" } } }),
+  });
+
+  assert.equal(result, true);
+  assert.deepEqual(rngCalls, [102]);
+  assert.equal(ctx.calls.some((call) => call[0] === "drawImage"), false);
+  assert.ok(ctx.calls.some((call) => call[0] === "createRadialGradient"));
+});
+
+test("drawItemShape draws loaded mouse cargo sprites while preserving facing", () => {
+  const item = {
+    id: 103,
+    type: "mouse",
+    x: 120,
+    y: 80,
+    r: 18,
+    grabbed: false,
+    art: { rot: 0 },
+    mouse: {
+      vx: -40,
+      phase: 0,
+      cargo: "diamond",
+    },
+  };
+
+  const { ctx, result } = draw(item, {
+    artAssets: registryWith({ "sprite.mouse.diamond": loadedAsset("mouse-diamond") }),
+  });
+
+  assert.equal(result, true);
+  assert.ok(ctx.calls.some((call) => call[0] === "scale" && call[1] === -1 && call[2] === 1));
+  assert.ok(ctx.calls.some((call) => call[0] === "drawImage" && call[1].label === "mouse-diamond"));
+});
+
 test("drawItemShape draws a mouse with bar cargo and keeps facing based on velocity", () => {
   const item = {
     id: 7,
