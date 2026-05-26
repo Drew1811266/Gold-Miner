@@ -428,6 +428,8 @@ export function drawHookLayer({
       ctx.restore();
     }
 
+    drawCrayonImageAsset(ctx, artAssets?.get?.("sprite.hookClaw"), -24, -6, 48, 58);
+
     // Tip glow while carrying (and bomb fuse hint)
     if (carriedItem && hook.state === "retract") {
       ctx.save();

@@ -453,6 +453,9 @@ export function drawMinerBackLayer(options = {}) {
     } finally {
       ctx.restore();
     }
+
+    drawCrayonImageAsset(ctx, bodyAsset, x - 36, y - 18, 72, 104);
+    drawCrayonImageAsset(ctx, headAsset, x - 27, y - 31, 54, 54);
   } finally {
     ctx.restore();
   }

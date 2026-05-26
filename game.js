@@ -6483,6 +6483,9 @@ function drawMinerBackWithLocalLayer(options = minerLayerOptions()) {
     ctx.restore();
   }
 
+  drawHostCrayonImageAsset(ctx, options.artAssets, "sprite.minerBody", x - 36, y - 18, 72, 104);
+  drawHostCrayonImageAsset(ctx, options.artAssets, "sprite.minerHead", x - 27, y - 31, 54, 54);
+
   } finally {
     ctx.restore();
   }

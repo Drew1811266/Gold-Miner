@@ -196,6 +196,8 @@ export function drawReelLayer(options = {}) {
     ctx.beginPath();
     ctx.arc(rOuter - 1, 1, 1.3, 0, Math.PI * 2);
     ctx.fill();
+
+    drawCrayonImageAsset(ctx, artAssets?.get?.("sprite.winchReel"), -20, -20, 40, 40);
   } finally {
     ctx.restore();
   }
@@ -258,6 +260,7 @@ export function drawWinchLayer(options = {}) {
     bolt(plateX + 14, plateY + plateH - 9);
     bolt(plateX + plateW - 14, plateY + plateH - 9);
 
+    drawCrayonImageAsset(ctx, artAssets?.get?.("sprite.winchPlate"), reel.x - 42, plankY - 29, 84, 34);
     drawReelLayer({ ctx, pivot, centerY: reel.y, hook, artAssets });
   } finally {
     ctx.restore();
