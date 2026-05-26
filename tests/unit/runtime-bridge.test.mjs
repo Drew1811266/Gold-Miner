@@ -246,6 +246,11 @@ test("runtime bridge exports and installs the expected namespace", async () => {
     assert.equal(typeof modules.createCrayonArtRegistry, "function");
     assert.equal(typeof modules.drawCrayonImageAsset, "function");
     assert.equal(modules.getCrayonItemAssetKey({ type: "gold" }), "sprite.gold");
+    assert.equal(bridge.CRAYON_ART_ASSETS, modules.CRAYON_ART_ASSETS);
+    assert.equal(bridge.CRAYON_ART_BASE_PATH, modules.CRAYON_ART_BASE_PATH);
+    assert.equal(bridge.createCrayonArtRegistry, modules.createCrayonArtRegistry);
+    assert.equal(bridge.drawCrayonImageAsset, modules.drawCrayonImageAsset);
+    assert.equal(bridge.getCrayonItemAssetKey, modules.getCrayonItemAssetKey);
     assert.equal(typeof modules.updateFxState, "function");
     assert.equal(bridge.updateFxState, modules.updateFxState);
     assert.equal(typeof modules.getHookDir, "function");

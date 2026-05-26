@@ -41,6 +41,8 @@ function createCtx() {
 
 test("crayon asset definitions contain stable keys and paths", () => {
   assert.equal(CRAYON_ART_BASE_PATH, "./assets/art/crayon/");
+  assert.equal(Object.isFrozen(CRAYON_ART_ASSETS), true);
+  assert.equal(Object.isFrozen(CRAYON_ART_ASSETS[0]), true);
   const keys = CRAYON_ART_ASSETS.map((asset) => asset.key);
   assert.ok(keys.includes("background.mine"));
   assert.ok(keys.includes("texture.paper"));
@@ -50,6 +52,11 @@ test("crayon asset definitions contain stable keys and paths", () => {
   assert.ok(keys.includes("icon.bomb"));
   assert.equal(new Set(keys).size, keys.length);
   assert.equal(CRAYON_ART_ASSETS.every((asset) => asset.path.startsWith("./assets/art/crayon/")), true);
+  const originalPath = CRAYON_ART_ASSETS[0].path;
+  assert.throws(() => {
+    CRAYON_ART_ASSETS[0].path = "./assets/art/crayon/backgrounds/changed.png";
+  }, TypeError);
+  assert.equal(CRAYON_ART_ASSETS[0].path, originalPath);
 });
 
 test("registry preloads images and reports loaded status", async () => {
@@ -81,6 +88,32 @@ test("registry records failed images without throwing", async () => {
   assert.equal(registry.status("sprite.missing"), "failed");
   assert.equal(registry.has("sprite.missing"), false);
   assert.equal(registry.get("sprite.missing"), null);
+});
+
+test("registry preload is idempotent and instantiates one image per definition", async () => {
+  let imageCount = 0;
+
+  class CountingImage extends FakeImage {
+    constructor() {
+      super();
+      imageCount += 1;
+    }
+  }
+
+  const registry = createCrayonArtRegistry({
+    ImageCtor: CountingImage,
+    definitions: [
+      { key: "sprite.gold", path: "./assets/art/crayon/sprites/gold-nugget.png" },
+      { key: "sprite.rock", path: "./assets/art/crayon/sprites/rock.png" },
+    ],
+  });
+
+  const firstPreload = registry.preload();
+  const secondPreload = registry.preload();
+
+  assert.equal(firstPreload, secondPreload);
+  assert.deepEqual(await firstPreload, { total: 2, loaded: 2, failed: 0 });
+  assert.equal(imageCount, 2);
 });
 
 test("drawCrayonImageAsset draws only loaded assets", () => {
