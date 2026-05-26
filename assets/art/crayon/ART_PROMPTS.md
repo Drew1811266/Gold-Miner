@@ -8,6 +8,8 @@ Transparent sprites and icons were generated on flat #00ff00 chroma-key backgrou
 python3 "${CODEX_HOME:-$HOME/.codex}/skills/.system/imagegen/scripts/remove_chroma_key.py" --auto-key border --soft-matte --transparent-threshold 12 --opaque-threshold 220 --despill
 ```
 
+Committed runtime PNGs were resized to practical in-game dimensions and saved without auxiliary PNG metadata after generation.
+
 Asset list:
 - `backgrounds/mine-storybook.png`: wide 16:9 cave game background, no characters, no UI.
 - `textures/paper-grain.png`: seamless warm sketchbook paper texture.
