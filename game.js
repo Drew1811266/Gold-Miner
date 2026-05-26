@@ -1638,6 +1638,7 @@ const bgAssets = {
   ready: false,
   images: [],
 };
+let crayonArtRegistry = null;
 
 function svgToDataUri(svg) {
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
@@ -1697,6 +1698,27 @@ function initBackgrounds() {
     img.src = svgToDataUri(BACKGROUNDS[i].svg);
     bgAssets.images[i] = img;
   }
+}
+
+function initCrayonArt() {
+  if (!GoldMinerModules.createCrayonArtRegistry || typeof Image !== "function") {
+    window.__goldMinerCrayonArtStatus = { total: 0, loaded: 0, failed: 0, skipped: true };
+    return;
+  }
+
+  crayonArtRegistry = GoldMinerModules.createCrayonArtRegistry({ ImageCtor: Image });
+  window.__goldMinerCrayonArtStatus = crayonArtRegistry.summary();
+  crayonArtRegistry.preload().then(() => render())
+    .catch((error) => {
+      window.__goldMinerCrayonArtError = error instanceof Error ? error.message : String(error);
+    })
+    .finally(() => {
+      window.__goldMinerCrayonArtStatus = crayonArtRegistry?.summary() ?? { total: 0, loaded: 0, failed: 0 };
+    });
+}
+
+function crayonArtAssets() {
+  return crayonArtRegistry;
 }
 
 const COLORS = {
@@ -4289,6 +4311,7 @@ function backgroundLayerOptions(now = performance.now()) {
     image: img,
     scene: game.scene,
     colors: COLORS,
+    artAssets: crayonArtAssets(),
     now,
   };
 }
@@ -4415,6 +4438,7 @@ function winchLayerOptions(hook = game.hook) {
     reel: getReelCenter(hook),
     plankY: getPlankY(),
     hook,
+    artAssets: crayonArtAssets(),
   };
 }
 
@@ -4803,6 +4827,7 @@ function itemShapeLayerOptions(item, metadata = {}) {
     metadata,
     now: performance.now(),
     createRng,
+    artAssets: crayonArtAssets(),
   };
 }
 
@@ -5708,6 +5733,7 @@ function hookShapeLayerOptions(hook = game.hook) {
     hookConfig: HOOK,
     now: performance.now(),
     itemGlowColor: carriedItem ? itemFxColor(carriedItem) : null,
+    artAssets: crayonArtAssets(),
   };
 }
 
@@ -6117,6 +6143,7 @@ function minerLayerOptions(hook = game.hook, miner = game.miner) {
     reel: getReelCenter(hook),
     now: performance.now(),
     attachedItem: attachedItem(hook),
+    artAssets: crayonArtAssets(),
   };
 }
 
@@ -7055,6 +7082,7 @@ async function boot() {
   initUi();
   initRunSeed();
   initBackgrounds();
+  initCrayonArt();
   game.bgIndex = pickBackgroundIndex(game.runSeed, null);
   resize();
   window.addEventListener("resize", resize, { passive: true });

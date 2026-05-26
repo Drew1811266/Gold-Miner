@@ -1672,3 +1672,19 @@ test("game input surfaces dispatch command objects", () => {
   assert.match(openShopBody, /dispatchCommand\(createRuntimeCommand\(types\.START_NEXT_LEVEL\)\)/);
   assert.match(openShopBody, /dispatchCommand\(createRuntimeCommand\(types\.RESTART_GAME\)\)/);
 });
+
+test("game preloads crayon art assets without coupling gameplay state to asset loading", () => {
+  const source = read("game.js");
+
+  assert.match(source, /let crayonArtRegistry = null;/);
+  assert.match(source, /function initCrayonArt\(\)/);
+  assert.match(source, /GoldMinerModules\.createCrayonArtRegistry\(\{ ImageCtor: Image \}\)/);
+  assert.match(source, /crayonArtRegistry\.preload\(\)\.then\(\(\) => render\(\)\)/);
+  assert.match(source, /window\.__goldMinerCrayonArtStatus =/);
+  assert.match(source, /function crayonArtAssets\(\)/);
+  assert.match(source, /initCrayonArt\(\);/);
+  assert.ok(
+    source.indexOf("initCrayonArt();") > source.indexOf("initBackgrounds();"),
+    "crayon art preload should start after existing background setup",
+  );
+});
