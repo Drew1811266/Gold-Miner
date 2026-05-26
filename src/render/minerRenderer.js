@@ -96,20 +96,15 @@ function lerpVec(a, b, t) {
 }
 
 function hasLoadedCrayonMiner(artAssets) {
-  const hasBody = artAssets?.has?.("sprite.minerBody") ?? Boolean(artAssets?.get?.("sprite.minerBody"));
-  const hasHead = artAssets?.has?.("sprite.minerHead") ?? Boolean(artAssets?.get?.("sprite.minerHead"));
-  return Boolean(hasBody && hasHead);
+  return Boolean(artAssets?.has?.("sprite.minerBody") ?? artAssets?.get?.("sprite.minerBody"));
 }
 
 function drawCrayonMiner(ctx, pose, artAssets) {
   const bodyAsset = artAssets?.get?.("sprite.minerBody");
-  const headAsset = artAssets?.get?.("sprite.minerHead");
   ctx.save();
   try {
     ctx.filter = "saturate(0.72) contrast(1.08) sepia(0.18)";
-    const drewBody = drawCrayonImageAsset(ctx, bodyAsset, pose.x - 42, pose.y - 23, 84, 114);
-    const drewHead = drawCrayonImageAsset(ctx, headAsset, pose.x - 32, pose.y - 40, 64, 64);
-    return drewBody && drewHead;
+    return drawCrayonImageAsset(ctx, bodyAsset, pose.x - 42, pose.y - 42, 84, 121);
   } finally {
     ctx.restore();
   }

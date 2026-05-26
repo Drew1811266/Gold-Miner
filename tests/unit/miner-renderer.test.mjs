@@ -155,7 +155,7 @@ test("drawMinerBackLayer draws the body, head, helmet, lamp, and canvas guards",
   assert.ok(ctx.calls.filter((call) => call[0] === "arcTo").length >= 12);
 });
 
-test("miner layers draw crayon body and head assets when loaded", () => {
+test("miner layer draws the complete crayon miner asset without duplicate head layering", () => {
   const ctx = createFakeCtx();
   const pose = createMinerPose(poseOptions());
   const artAssets = registryWith({
@@ -165,8 +165,18 @@ test("miner layers draw crayon body and head assets when loaded", () => {
 
   drawMinerBackLayer({ ctx, pose, artAssets });
 
-  assert.ok(ctx.calls.some((call) => call[0] === "drawImage" && call[1].label === "body"));
-  assert.ok(ctx.calls.some((call) => call[0] === "drawImage" && call[1].label === "head"));
+  assert.ok(
+    ctx.calls.some(
+      (call) =>
+        call[0] === "drawImage" &&
+        call[1].label === "body" &&
+        call[2] === pose.x - 42 &&
+        call[3] === pose.y - 42 &&
+        call[4] === 84 &&
+        call[5] === 121,
+    ),
+  );
+  assert.equal(ctx.calls.some((call) => call[0] === "drawImage" && call[1].label === "head"), false);
 });
 
 test("drawMinerFrontLayer draws both articulated arms and heavy strain marks", () => {
