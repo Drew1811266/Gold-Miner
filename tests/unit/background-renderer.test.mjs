@@ -81,6 +81,18 @@ function backgroundOptions(overrides = {}) {
   };
 }
 
+function createLoadedAsset(label) {
+  return { status: "loaded", image: { label, naturalWidth: 1200, naturalHeight: 675 } };
+}
+
+function createRegistry(entries) {
+  return {
+    get(key) {
+      return entries[key] ?? null;
+    },
+  };
+}
+
 test("drawBackgroundLayer draws valid images with cover crop before overlays", () => {
   const ctx = createFakeCtx();
 
@@ -129,6 +141,40 @@ test("drawBackgroundLayer draws sky and ground gradients when image is unavailab
       ["fillRect", 0, 216, 400, 84],
     ],
   );
+});
+
+test("drawBackgroundLayer prefers crayon background and paper texture when loaded", () => {
+  const ctx = createFakeCtx();
+  const artAssets = createRegistry({
+    "background.mine": createLoadedAsset("mine"),
+    "texture.paper": createLoadedAsset("paper"),
+  });
+
+  drawBackgroundLayer(backgroundOptions({ ctx, image: null, artAssets }));
+
+  const imageCalls = ctx.calls.filter((call) => call[0] === "drawImage");
+  assert.equal(imageCalls.length, 2);
+  assert.equal(imageCalls[0][1].label, "mine");
+  assert.equal(imageCalls[1][1].label, "paper");
+  assert.equal(ctx.calls.some((call) => call[0] === "createLinearGradient"), false);
+});
+
+test("drawPlankLayer draws crayon wood beam asset when loaded", () => {
+  const ctx = createFakeCtx();
+  const artAssets = createRegistry({
+    "texture.woodBeam": createLoadedAsset("wood"),
+  });
+
+  drawPlankLayer({
+    ctx,
+    viewport: { w: 400, h: 300 },
+    plankY: 108,
+    plankHeight: 22,
+    colors: COLORS,
+    artAssets,
+  });
+
+  assert.ok(ctx.calls.some((call) => call[0] === "drawImage" && call[1].label === "wood"));
 });
 
 test("drawBackgroundLayer draws stars, dust, light sweep, and vignette overlays", () => {

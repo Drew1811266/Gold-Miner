@@ -122,6 +122,11 @@ function drawImageCover(ctx, image, x, y, w, h) {
   return true;
 }
 
+function loadedArtImage(artAssets, key) {
+  const asset = artAssets?.get?.(key);
+  return asset?.status === "loaded" ? asset.image : null;
+}
+
 function drawFallbackBackground(ctx, viewport, colors) {
   const { w, h } = viewport;
   const groundY = h * 0.72;
@@ -240,7 +245,19 @@ export function drawBackgroundLayer(options = {}) {
   validateBackgroundColors(colors);
   assertFiniteNumber(now, "drawBackgroundLayer now");
 
-  if (!drawImageCover(ctx, image, 0, 0, viewport.w, viewport.h)) {
+  const crayonBackground = loadedArtImage(options.artAssets, "background.mine");
+  const paperTexture = loadedArtImage(options.artAssets, "texture.paper");
+  if (crayonBackground && drawImageCover(ctx, crayonBackground, 0, 0, viewport.w, viewport.h)) {
+    if (paperTexture) {
+      ctx.save();
+      try {
+        ctx.globalAlpha = 0.28;
+        drawImageCover(ctx, paperTexture, 0, 0, viewport.w, viewport.h);
+      } finally {
+        ctx.restore();
+      }
+    }
+  } else if (!drawImageCover(ctx, image, 0, 0, viewport.w, viewport.h)) {
     drawFallbackBackground(ctx, viewport, colors);
   }
 
@@ -265,6 +282,13 @@ export function drawPlankLayer(options = {}) {
 
   ctx.save();
   try {
+    const woodBeam = loadedArtImage(options.artAssets, "texture.woodBeam");
+    if (woodBeam) {
+      assertMethod(ctx, "drawImage", "ctx");
+      ctx.drawImage(woodBeam, 0, plankY, viewport.w, plankHeight);
+      return true;
+    }
+
     const beam = ctx.createLinearGradient(0, plankY, 0, plankY + plankHeight);
     beam.addColorStop(0, "#9a663a");
     beam.addColorStop(0.45, colors.wood);
