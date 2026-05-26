@@ -1702,6 +1702,10 @@ test("styles use crayon art textures and keep existing UI selectors", () => {
   const html = read("index.html");
   const css = read("styles.css");
 
+  assert.match(html, /href="\.\/assets\/icons\/favicon\.ico\?v=crayon-icon-20260526"/);
+  assert.match(html, /href="\.\/assets\/icons\/favicon-16x16\.png\?v=crayon-icon-20260526"/);
+  assert.match(html, /href="\.\/assets\/icons\/favicon-32x32\.png\?v=crayon-icon-20260526"/);
+  assert.match(html, /href="\.\/assets\/icons\/apple-touch-icon\.png\?v=crayon-icon-20260526"/);
   assert.match(html, /href="\.\/styles\.css\?v=crayon-paper-20260526"/);
   assert.match(css, /--paper:/);
   assert.match(css, /url\("\.\/assets\/art\/crayon\/textures\/ui-paper\.png"\)/);
