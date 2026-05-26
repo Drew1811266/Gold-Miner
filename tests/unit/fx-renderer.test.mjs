@@ -30,6 +30,9 @@ function createFakeCtx(overrides = {}) {
     fillText(...args) {
       calls.push(["fillText", ...args]);
     },
+    drawImage(...args) {
+      calls.push(["drawImage", ...args]);
+    },
     set globalCompositeOperation(value) {
       calls.push(["globalCompositeOperation", value]);
     },
@@ -76,6 +79,10 @@ function createFx() {
   };
 }
 
+function loadedAsset(label) {
+  return { status: "loaded", image: { label, naturalWidth: 64, naturalHeight: 64 } };
+}
+
 test("drawFxLayer renders shockwave rings with additive compositing and faded arcs", () => {
   const ctx = createFakeCtx();
 
@@ -110,6 +117,22 @@ test("drawFxLayer renders particles with per-particle alpha fade and minimum rad
     ctx.calls.filter((call) => call[0] === "save").length,
     ctx.calls.filter((call) => call[0] === "restore").length,
   );
+});
+
+test("drawFxLayer draws crayon spark sprites for particles when loaded", () => {
+  const ctx = createFakeCtx();
+
+  drawFxLayer({
+    ctx,
+    fx: {
+      rings: [],
+      particles: [{ x: 10, y: 20, age: 0, life: 1, size: 5, color: "#ffd34d" }],
+      pops: [],
+    },
+    artAssets: { get: () => loadedAsset("spark") },
+  });
+
+  assert.ok(ctx.calls.some((call) => call[0] === "drawImage" && call[1].label === "spark"));
 });
 
 test("drawFxLayer renders score pops with centered stroked and filled text", () => {

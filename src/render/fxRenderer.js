@@ -1,4 +1,5 @@
 import { clamp, lerp } from "../core/geometry.js";
+import { drawCrayonImageAsset } from "./crayonArtAssets.js";
 
 function assertObject(value, name) {
   if (value === null || typeof value !== "object") {
@@ -42,6 +43,7 @@ function validateCtx(ctx) {
     "fill",
     "strokeText",
     "fillText",
+    "drawImage",
   ]) {
     assertMethod(ctx, methodName, "ctx");
   }
@@ -101,7 +103,8 @@ function withSaved(ctx, draw) {
   }
 }
 
-export function drawFxLayer({ ctx, fx } = {}) {
+export function drawFxLayer(options = {}) {
+  const { ctx, fx } = options;
   validateCtx(ctx);
   validateFx(fx);
 
@@ -136,6 +139,20 @@ export function drawFxLayer({ ctx, fx } = {}) {
 
     withSaved(ctx, () => {
       ctx.globalAlpha = a;
+      const sparkAsset = options.artAssets?.get?.("sprite.spark");
+      if (
+        drawCrayonImageAsset(
+          ctx,
+          sparkAsset,
+          particle.x - particle.size,
+          particle.y - particle.size,
+          particle.size * 2,
+          particle.size * 2,
+        )
+      ) {
+        particles += 1;
+        return;
+      }
       ctx.fillStyle = particle.color;
       ctx.beginPath();
       ctx.arc(particle.x, particle.y, Math.max(0.6, particle.size), 0, Math.PI * 2);

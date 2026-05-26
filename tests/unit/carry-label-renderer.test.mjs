@@ -87,9 +87,10 @@ test("drawCarryLabelLayer draws the carry label geometry and returns true", () =
   assert.equal(ctx.calls.filter((call) => call[0] === "fill").length, 4);
   assert.equal(ctx.calls.filter((call) => call[0] === "stroke").length, 1);
   assert.ok(ctx.calls.some((call) => call[0] === "fillStyle" && call[1] === "#ffd34d"));
-  assert.ok(ctx.calls.some((call) => call[0] === "fillStyle" && call[1] === "rgba(0,0,0,0.48)"));
+  assert.ok(ctx.calls.some((call) => call[0] === "fillStyle" && call[1] === "rgba(244, 226, 185, 0.94)"));
+  assert.ok(ctx.calls.some((call) => call[0] === "strokeStyle" && String(call[1]).includes("rgba(70, 45, 25")));
   assert.ok(ctx.calls.some((call) => call[0] === "fillStyle" && call[1] === "#ffffff"));
-  assert.ok(ctx.calls.some((call) => call[0] === "fillStyle" && call[1] === "rgba(255,255,255,0.9)"));
+  assert.ok(ctx.calls.some((call) => call[0] === "fillStyle" && call[1] === "rgba(45, 31, 20, 0.94)"));
   assert.ok(ctx.calls.some((call) => call[0] === "arc" && call[1] === 131 && call[2] === 89 && call[3] === 5));
   assert.ok(ctx.calls.some((call) => call[0] === "arc" && call[1] === 129.8 && call[2] === 87.8 && call[3] === 1.8));
   assert.deepEqual(ctx.calls.find((call) => call[0] === "fillText"), ["fillText", "120", 144, 89]);

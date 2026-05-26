@@ -96,12 +96,12 @@ export function drawCarryLabelLayer({ ctx, end, viewport, color, text } = {}) {
     roundRectPath(ctx, x, y, w, h, 12);
     ctx.fill();
 
-    ctx.globalAlpha = 0.92;
-    ctx.fillStyle = "rgba(0,0,0,0.48)";
-    roundRectPath(ctx, x, y, w, h, 12);
+    ctx.globalAlpha = 0.94;
+    ctx.fillStyle = "rgba(244, 226, 185, 0.94)";
+    roundRectPath(ctx, x, y, w, h, 10);
     ctx.fill();
-    ctx.strokeStyle = "rgba(255,255,255,0.14)";
-    ctx.lineWidth = 1;
+    ctx.strokeStyle = "rgba(70, 45, 25, 0.72)";
+    ctx.lineWidth = 1.4;
     ctx.stroke();
 
     ctx.globalAlpha = 0.92;
@@ -116,7 +116,7 @@ export function drawCarryLabelLayer({ ctx, end, viewport, color, text } = {}) {
     ctx.fill();
 
     ctx.globalAlpha = 0.9;
-    ctx.fillStyle = "rgba(255,255,255,0.9)";
+    ctx.fillStyle = "rgba(45, 31, 20, 0.94)";
     ctx.fillText(text, x + paddingX + dot + 8, y + h / 2);
   } finally {
     ctx.restore();
