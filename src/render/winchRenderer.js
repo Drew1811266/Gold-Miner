@@ -1,4 +1,5 @@
 import { clamp } from "../core/geometry.js";
+import { drawCrayonImageAsset } from "./crayonArtAssets.js";
 
 function assertObject(value, name) {
   if (value === null || typeof value !== "object") {
@@ -81,7 +82,8 @@ function validateWinchOptions({ ctx, pivot, reel, plankY, hook }) {
   validateHook(hook, "drawWinchLayer");
 }
 
-export function drawReelLayer({ ctx, pivot, centerY, hook } = {}) {
+export function drawReelLayer(options = {}) {
+  const { ctx, pivot, centerY, hook, artAssets = null } = options;
   validateReelOptions({ ctx, pivot, centerY, hook });
 
   const rOuter = 16;
@@ -93,6 +95,7 @@ export function drawReelLayer({ ctx, pivot, centerY, hook } = {}) {
   ctx.save();
   try {
     ctx.translate(pivot.x, centerY);
+    drawCrayonImageAsset(ctx, artAssets?.get?.("sprite.winchReel"), -20, -20, 40, 40);
 
     if (blur > 0.001) {
       ctx.save();
@@ -199,7 +202,8 @@ export function drawReelLayer({ ctx, pivot, centerY, hook } = {}) {
   return { drewReel: true };
 }
 
-export function drawWinchLayer({ ctx, pivot, reel, plankY, hook } = {}) {
+export function drawWinchLayer(options = {}) {
+  const { ctx, pivot, reel, plankY, hook, artAssets = null } = options;
   validateWinchOptions({ ctx, pivot, reel, plankY, hook });
 
   ctx.save();
@@ -214,6 +218,8 @@ export function drawWinchLayer({ ctx, pivot, reel, plankY, hook } = {}) {
     } finally {
       ctx.restore();
     }
+
+    drawCrayonImageAsset(ctx, artAssets?.get?.("sprite.winchPlate"), reel.x - 42, plankY - 29, 84, 34);
 
     const plateW = 72;
     const plateH = 26;
@@ -251,7 +257,7 @@ export function drawWinchLayer({ ctx, pivot, reel, plankY, hook } = {}) {
     bolt(plateX + 14, plateY + plateH - 9);
     bolt(plateX + plateW - 14, plateY + plateH - 9);
 
-    drawReelLayer({ ctx, pivot, centerY: reel.y, hook });
+    drawReelLayer({ ctx, pivot, centerY: reel.y, hook, artAssets });
   } finally {
     ctx.restore();
   }

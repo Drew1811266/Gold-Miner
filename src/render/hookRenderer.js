@@ -1,4 +1,5 @@
 import { clamp, lerp } from "../core/geometry.js";
+import { drawCrayonImageAsset } from "./crayonArtAssets.js";
 
 function assertObject(value, name) {
   if (value === null || typeof value !== "object") {
@@ -138,6 +139,7 @@ export function drawHookLayer({
   hookConfig,
   now,
   itemGlowColor = null,
+  artAssets = null,
 } = {}) {
   validateHookLayerOptions({
     ctx,
@@ -217,6 +219,7 @@ export function drawHookLayer({
     ctx.translate(ring.x, ring.y);
     const theta = Math.atan2(dir.y, dir.x);
     ctx.rotate(theta - Math.PI / 2);
+    drawCrayonImageAsset(ctx, artAssets?.get?.("sprite.hookClaw"), -24, -6, 48, 58);
 
     const close = clamp(hook.clawClose ?? 0, 0, 1);
     const sizeR = carriedItem ? carriedItem.r : 0;

@@ -1,4 +1,5 @@
 import { clamp, lerp } from "../core/geometry.js";
+import { drawCrayonImageAsset } from "./crayonArtAssets.js";
 
 function assertObject(value, name) {
   if (value === null || typeof value !== "object") {
@@ -146,7 +147,8 @@ export function createMinerPose({ hook, miner, pivot, reel, now, attachedItem = 
   };
 }
 
-export function drawMinerBackLayer({ ctx, pose } = {}) {
+export function drawMinerBackLayer(options = {}) {
+  const { ctx, pose } = options;
   validateCtx(ctx, "drawMinerBackLayer");
   validatePose(pose, "drawMinerBackLayer");
 
@@ -186,6 +188,11 @@ export function drawMinerBackLayer({ ctx, pose } = {}) {
     } finally {
       ctx.restore();
     }
+
+    const bodyAsset = options.artAssets?.get?.("sprite.minerBody");
+    drawCrayonImageAsset(ctx, bodyAsset, x - 36, y - 18, 72, 104);
+    const headAsset = options.artAssets?.get?.("sprite.minerHead");
+    drawCrayonImageAsset(ctx, headAsset, x - 27, y - 31, 54, 54);
 
     // Backpack
     ctx.save();

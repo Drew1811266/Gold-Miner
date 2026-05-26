@@ -60,6 +60,9 @@ function createFakeCtx(overrides = {}) {
     closePath() {
       calls.push(["closePath"]);
     },
+    drawImage(...args) {
+      calls.push(["drawImage", ...args]);
+    },
     setLineDash(value) {
       calls.push(["setLineDash", value]);
     },
@@ -119,6 +122,18 @@ const baseOptions = () => ({
   now: 1200,
   itemGlowColor: null,
 });
+
+function loadedAsset(label) {
+  return { status: "loaded", image: { label, naturalWidth: 128, naturalHeight: 128 } };
+}
+
+function registryWith(entries) {
+  return {
+    get(key) {
+      return entries[key] ?? null;
+    },
+  };
+}
 
 test("drawHookLayer draws rope shadow and highlight from pivot to ring", () => {
   const options = baseOptions();
@@ -180,6 +195,29 @@ test("drawHookLayer draws ring, stem, and tri-prong claw paths", () => {
   assert.ok(options.ctx.calls.some((call) => call[0] === "moveTo" && call[1] === 0 && call[2] === 0));
   assert.ok(options.ctx.calls.filter((call) => call[0] === "bezierCurveTo").length >= 9);
   assert.ok(options.ctx.calls.filter((call) => call[0] === "ellipse").length >= 4);
+});
+
+test("drawHookLayer overlays crayon hook claw asset when loaded", () => {
+  const ctx = createFakeCtx();
+  const artAssets = registryWith({
+    "sprite.hookClaw": loadedAsset("claw"),
+  });
+
+  drawHookLayer({
+    ctx,
+    hook: { length: 100, maxLength: 300, state: "swing", angle: 0.2, reelAngle: 0, clawClose: 0 },
+    pivot: { x: 200, y: 106 },
+    tip: { x: 220, y: 180 },
+    dir: { x: 0.2, y: 0.98 },
+    carriedItem: null,
+    canBomb: false,
+    hookConfig: { ringToTip: 44, jawBase: 16 },
+    now: 0,
+    itemGlowColor: null,
+    artAssets,
+  });
+
+  assert.ok(ctx.calls.some((call) => call[0] === "drawImage" && call[1].label === "claw"));
 });
 
 test("drawHookLayer draws carried item glow while retracting with cargo", () => {

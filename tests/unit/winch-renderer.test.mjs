@@ -54,6 +54,9 @@ function createFakeCtx(overrides = {}) {
     closePath() {
       calls.push(["closePath"]);
     },
+    drawImage(...args) {
+      calls.push(["drawImage", ...args]);
+    },
     createLinearGradient(...args) {
       calls.push(["createLinearGradient", ...args]);
       return createGradient(calls, "linear", args);
@@ -102,6 +105,18 @@ const winchOptions = () => {
     hook: { reelAngle: 0.45, spoolSpeed: 0 },
   };
 };
+
+function loadedAsset(label) {
+  return { status: "loaded", image: { label, naturalWidth: 128, naturalHeight: 128 } };
+}
+
+function registryWith(entries) {
+  return {
+    get(key) {
+      return entries[key] ?? null;
+    },
+  };
+}
 
 test("drawReelLayer draws reel shadow, ring, hub, spokes, and handle", () => {
   const options = reelOptions();
@@ -180,6 +195,27 @@ test("drawWinchLayer draws mount plate, four bolts, and delegates reel drawing",
   assert.equal(options.ctx.calls.filter((call) => call[0] === "arc" && call[3] === 4.4).length, 4);
   assert.equal(options.ctx.calls.filter((call) => call[0] === "arc" && call[3] === 1.4).length, 4);
   assert.deepEqual(options.ctx.calls.find((call) => call[0] === "translate"), ["translate", 120, 50]);
+});
+
+test("drawWinchLayer draws crayon plate and reel assets when loaded", () => {
+  const ctx = createFakeCtx();
+  const hook = { reelAngle: 0.4, spoolSpeed: 0 };
+  const artAssets = registryWith({
+    "sprite.winchPlate": loadedAsset("plate"),
+    "sprite.winchReel": loadedAsset("reel"),
+  });
+
+  drawWinchLayer({
+    ctx,
+    pivot: { x: 200, y: 106 },
+    reel: { x: 200, y: 92 },
+    plankY: 108,
+    hook,
+    artAssets,
+  });
+
+  assert.ok(ctx.calls.some((call) => call[0] === "drawImage" && call[1].label === "plate"));
+  assert.ok(ctx.calls.some((call) => call[0] === "drawImage" && call[1].label === "reel"));
 });
 
 test("drawWinchLayer restores canvas state when drawing throws", () => {

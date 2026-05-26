@@ -58,6 +58,9 @@ function createFakeCtx(overrides = {}) {
     fillRect(...args) {
       calls.push(["fillRect", ...args]);
     },
+    drawImage(...args) {
+      calls.push(["drawImage", ...args]);
+    },
     arcTo(...args) {
       calls.push(["arcTo", ...args]);
     },
@@ -104,6 +107,18 @@ const poseOptions = () => ({
   attachedItem: { weight: 5.2 },
 });
 
+function loadedAsset(label) {
+  return { status: "loaded", image: { label, naturalWidth: 128, naturalHeight: 128 } };
+}
+
+function registryWith(entries) {
+  return {
+    get(key) {
+      return entries[key] ?? null;
+    },
+  };
+}
+
 test("createMinerPose is deterministic for fixed runtime inputs", () => {
   const options = poseOptions();
   const pose = createMinerPose(options);
@@ -138,6 +153,20 @@ test("drawMinerBackLayer draws the body, head, helmet, lamp, and canvas guards",
   assert.ok(ctx.calls.some((call) => call[0] === "arc" && call[1] === pose.x && call[3] === 19.5));
   assert.ok(ctx.calls.some((call) => call[0] === "fillStyle" && call[1] === "#ffd34d"));
   assert.ok(ctx.calls.filter((call) => call[0] === "arcTo").length >= 12);
+});
+
+test("miner layers draw crayon body and head assets when loaded", () => {
+  const ctx = createFakeCtx();
+  const pose = createMinerPose(poseOptions());
+  const artAssets = registryWith({
+    "sprite.minerBody": loadedAsset("body"),
+    "sprite.minerHead": loadedAsset("head"),
+  });
+
+  drawMinerBackLayer({ ctx, pose, artAssets });
+
+  assert.ok(ctx.calls.some((call) => call[0] === "drawImage" && call[1].label === "body"));
+  assert.ok(ctx.calls.some((call) => call[0] === "drawImage" && call[1].label === "head"));
 });
 
 test("drawMinerFrontLayer draws both articulated arms and heavy strain marks", () => {
