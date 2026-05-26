@@ -144,3 +144,14 @@ test("extracted boundary modules avoid host globals", () => {
     assert.doesNotMatch(readSourceFile(filePath), hostGlobalPattern, `${projectPath} should not access host globals`);
   }
 });
+
+test("crayon art asset registry stays inside the render boundary", () => {
+  const filePath = resolve(sourceRoot, "render/crayonArtAssets.js");
+  const source = readSourceFile(filePath);
+  const imports = extractImportSpecifiers(source)
+    .map((specifier) => resolveLocalImport(filePath, specifier))
+    .filter(Boolean);
+
+  assert.deepEqual(imports, [], "crayonArtAssets should stay pure and not import other layers");
+  assert.doesNotMatch(source, /\b(window|document|localStorage|sessionStorage)\b/);
+});
