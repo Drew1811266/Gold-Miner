@@ -1699,8 +1699,10 @@ test("game preloads crayon art assets without coupling gameplay state to asset l
 });
 
 test("styles use crayon art textures and keep existing UI selectors", () => {
+  const html = read("index.html");
   const css = read("styles.css");
 
+  assert.match(html, /href="\.\/styles\.css\?v=crayon-paper-20260526"/);
   assert.match(css, /--paper:/);
   assert.match(css, /url\("\.\/assets\/art\/crayon\/textures\/ui-paper\.png"\)/);
   assert.match(css, /url\("\.\/assets\/art\/crayon\/textures\/paper-grain\.png"\)/);
