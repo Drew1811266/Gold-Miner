@@ -1,14 +1,18 @@
 :root {
-  color-scheme: dark;
-  --bg: #070a13;
-  --panel: rgba(16, 22, 40, 0.8);
-  --panel-border: rgba(255, 255, 255, 0.12);
-  --text: rgba(255, 255, 255, 0.9);
-  --muted: rgba(255, 255, 255, 0.65);
-  --primary: #ffd34d;
-  --primary-ink: #1d1400;
-  --danger: #ff4d4d;
-  --shadow: rgba(0, 0, 0, 0.35);
+  color-scheme: light;
+  --paper: #efe2c5;
+  --paper-deep: #d4b982;
+  --ink: #2c2118;
+  --ink-soft: rgba(44, 33, 24, 0.72);
+  --charcoal: rgba(39, 28, 21, 0.78);
+  --panel: rgba(244, 226, 185, 0.9);
+  --panel-border: rgba(74, 49, 31, 0.45);
+  --text: #2c2118;
+  --muted: rgba(44, 33, 24, 0.66);
+  --primary: #d8a63b;
+  --primary-ink: #271a0d;
+  --danger: #b65343;
+  --shadow: rgba(70, 45, 25, 0.24);
 }
 
 * {
@@ -24,7 +28,10 @@ body {
   margin: 0;
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans",
     "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
-  background: radial-gradient(1200px 800px at 50% -20%, #283056, var(--bg));
+  background:
+    linear-gradient(rgba(239, 226, 197, 0.74), rgba(239, 226, 197, 0.74)),
+    url("./assets/art/crayon/textures/paper-grain.png") center / 520px 520px repeat,
+    radial-gradient(1100px 720px at 50% -12%, #f4d992, #8a5940 52%, #2b1c17 100%);
   color: var(--text);
 }
 
@@ -34,13 +41,15 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 14px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(7, 10, 19, 0.68);
-  backdrop-filter: blur(10px);
+  border-bottom: 2px solid rgba(74, 49, 31, 0.4);
+  background:
+    linear-gradient(rgba(244, 226, 185, 0.88), rgba(222, 190, 132, 0.9)),
+    url("./assets/art/crayon/textures/ui-paper.png") center / 420px 420px repeat;
   position: sticky;
   top: 0;
   z-index: 10;
   flex-wrap: wrap;
+  box-shadow: 0 8px 24px rgba(70, 45, 25, 0.16);
 }
 
 .brand {
@@ -49,8 +58,8 @@ body {
 
 .brandTitle {
   font-size: 16px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
+  font-weight: 800;
+  color: var(--ink);
 }
 
 .brandSubtitle {
@@ -62,8 +71,7 @@ body {
 .brandMarket {
   margin-top: 4px;
   font-size: 12px;
-  color: #ffd86f;
-  letter-spacing: 0.2px;
+  color: #6f3d24;
 }
 
 .stats {
@@ -73,11 +81,21 @@ body {
   align-items: stretch;
 }
 
+.stat,
+.chip,
+.panel,
+.shopItem,
+.shopIcon {
+  border-radius: 8px;
+  border: 2px solid var(--panel-border);
+  background:
+    linear-gradient(rgba(244, 226, 185, 0.86), rgba(218, 186, 128, 0.82)),
+    url("./assets/art/crayon/textures/ui-paper.png") center / 360px 360px repeat;
+  box-shadow: 0 8px 18px var(--shadow);
+}
+
 .stat {
   padding: 8px 10px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
-  background: rgba(0, 0, 0, 0.12);
   min-width: 84px;
 }
 
@@ -89,7 +107,7 @@ body {
 .stat .value {
   margin-top: 3px;
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 800;
   font-variant-numeric: tabular-nums;
 }
 
@@ -107,22 +125,23 @@ body {
 
 .btn {
   appearance: none;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 10px;
-  background: rgba(0, 0, 0, 0.2);
-  color: var(--text);
+  border: 2px solid rgba(74, 49, 31, 0.52);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(236, 207, 134, 0.96), rgba(184, 124, 58, 0.92)),
+    url("./assets/art/crayon/textures/ui-paper.png") center / 280px 280px repeat;
+  color: var(--primary-ink);
   padding: 10px 12px;
   font-size: 13px;
-  font-weight: 650;
+  font-weight: 800;
   cursor: pointer;
-  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease, opacity 120ms ease;
-  box-shadow: 0 10px 28px var(--shadow);
+  transition: transform 120ms ease, filter 120ms ease, opacity 120ms ease;
+  box-shadow: 0 8px 16px var(--shadow);
 }
 
 .btn:hover {
   transform: translateY(-1px);
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.22);
+  filter: saturate(1.08) brightness(1.03);
 }
 
 .btn:active {
@@ -136,23 +155,16 @@ body {
 }
 
 .btn.primary {
-  background: linear-gradient(180deg, #ffe08a, var(--primary));
-  border-color: rgba(255, 255, 255, 0.16);
-  color: var(--primary-ink);
-}
-
-.btn.primary:hover {
-  background: linear-gradient(180deg, #ffeaab, #ffd34d);
+  background:
+    linear-gradient(180deg, rgba(236, 195, 80, 0.98), rgba(202, 137, 48, 0.96)),
+    url("./assets/art/crayon/textures/ui-paper.png") center / 280px 280px repeat;
 }
 
 .btn.warning {
-  background: linear-gradient(180deg, #ff8a8a, #ff4d4d);
-  color: #2a0b0b;
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-.btn.warning:hover {
-  background: linear-gradient(180deg, #ffaaaa, #ff5c5c);
+  background:
+    linear-gradient(180deg, rgba(196, 93, 72, 0.98), rgba(139, 58, 48, 0.96)),
+    url("./assets/art/crayon/textures/ui-paper.png") center / 280px 280px repeat;
+  color: #2d1510;
 }
 
 .btn.warning:not(:disabled) {
@@ -168,23 +180,9 @@ body {
 }
 
 .stat.danger {
-  border-color: rgba(255, 77, 77, 0.26);
-  box-shadow: 0 0 0 1px rgba(255, 77, 77, 0.08), 0 18px 40px rgba(0, 0, 0, 0.35);
+  border-color: rgba(148, 48, 38, 0.5);
+  box-shadow: 0 0 0 2px rgba(148, 48, 38, 0.12), 0 12px 24px rgba(70, 45, 25, 0.22);
   animation: timePulse 0.85s ease-in-out infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .btn.warning:not(:disabled) {
-    animation: none;
-  }
-
-  .chip.bump {
-    animation: none;
-  }
-
-  .stat.danger {
-    animation: none;
-  }
 }
 
 .inventory {
@@ -197,9 +195,6 @@ body {
 
 .chip {
   padding: 6px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(0, 0, 0, 0.2);
   font-size: 12px;
   color: var(--muted);
   display: inline-flex;
@@ -208,29 +203,37 @@ body {
 }
 
 .chipIcon {
-  width: 14px;
-  height: 14px;
+  width: 18px;
+  height: 18px;
   flex: 0 0 auto;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
-.chip.bomb .chipIcon {
-  color: #ff4d4d;
-  filter: drop-shadow(0 0 10px rgba(255, 77, 77, 0.26));
+.chipIcon use,
+.shopIcon svg use {
+  display: none;
 }
 
-.chip.speed .chipIcon {
-  color: #8fe9ff;
-  filter: drop-shadow(0 0 10px rgba(143, 233, 255, 0.22));
+.chip.bomb .chipIcon,
+.shopIcon.bomb svg {
+  background-image: url("./assets/art/crayon/icons/bomb.png");
 }
 
-.chip.lucky .chipIcon {
-  color: #b07bff;
-  filter: drop-shadow(0 0 10px rgba(176, 123, 255, 0.22));
+.chip.speed .chipIcon,
+.shopIcon.speed svg {
+  background-image: url("./assets/art/crayon/icons/speed.png");
+}
+
+.chip.lucky .chipIcon,
+.shopIcon.lucky svg {
+  background-image: url("./assets/art/crayon/icons/lucky-bag.png");
 }
 
 .chip span {
-  color: var(--text);
-  font-weight: 700;
+  color: var(--ink);
+  font-weight: 800;
   margin-left: 4px;
   font-variant-numeric: tabular-nums;
 }
@@ -245,12 +248,12 @@ body {
 .canvasWrap {
   width: min(1100px, 100%);
   height: min(660px, 100%);
-  border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  border: 3px solid rgba(58, 38, 26, 0.72);
   overflow: hidden;
   position: relative;
-  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.45);
-  background: radial-gradient(900px 500px at 50% 20%, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0));
+  box-shadow: 0 20px 48px rgba(43, 28, 23, 0.38);
+  background: #2b1c17;
 }
 
 canvas {
@@ -264,8 +267,7 @@ canvas {
   inset: 0;
   display: grid;
   place-items: center;
-  background: rgba(0, 0, 0, 0.46);
-  backdrop-filter: blur(8px);
+  background: rgba(48, 31, 24, 0.48);
 }
 
 .overlay.hidden {
@@ -274,22 +276,18 @@ canvas {
 
 .panel {
   width: min(560px, calc(100% - 32px));
-  border-radius: 16px;
-  border: 1px solid var(--panel-border);
-  background: var(--panel);
   padding: 18px 18px 14px;
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
 }
 
 .panelTitle {
   margin: 0;
   font-size: 22px;
-  letter-spacing: 0.6px;
+  color: var(--ink);
 }
 
 .panelText {
   margin: 10px 0 14px;
-  color: rgba(255, 255, 255, 0.78);
+  color: var(--ink-soft);
   line-height: 1.5;
   white-space: pre-line;
 }
@@ -303,23 +301,23 @@ canvas {
 .panelHint {
   margin: 12px 0 0;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--muted);
 }
 
 .kbd {
   display: inline-block;
   padding: 1px 6px;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  border-radius: 7px;
-  background: rgba(0, 0, 0, 0.2);
-  color: rgba(255, 255, 255, 0.85);
-  font-weight: 650;
+  border: 1px solid rgba(74, 49, 31, 0.5);
+  border-radius: 6px;
+  background: rgba(255, 245, 218, 0.52);
+  color: var(--ink);
+  font-weight: 700;
 }
 
 .shop {
   margin-top: 14px;
   padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 2px solid rgba(74, 49, 31, 0.28);
 }
 
 .shop.hidden {
@@ -328,7 +326,7 @@ canvas {
 
 .shopIntro {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--muted);
   margin-bottom: 10px;
 }
 
@@ -342,75 +340,45 @@ canvas {
   grid-template-columns: auto 1fr auto;
   gap: 8px 12px;
   padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(0, 0, 0, 0.2);
-  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+  transition: transform 120ms ease, filter 120ms ease, border-color 120ms ease;
   align-items: center;
 }
 
 .shopItem:hover {
   transform: translateY(-1px);
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.18);
+  filter: saturate(1.04) brightness(1.02);
+  border-color: rgba(74, 49, 31, 0.65);
 }
 
 .shopIcon {
-  width: 36px;
-  height: 36px;
-  border-radius: 12px;
+  width: 40px;
+  height: 40px;
   display: grid;
   place-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(0, 0, 0, 0.22);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
 }
 
 .shopIcon svg {
-  width: 18px;
-  height: 18px;
-}
-
-.shopIcon.bomb {
-  background: radial-gradient(120% 120% at 30% 20%, rgba(255, 211, 77, 0.25), rgba(0, 0, 0, 0.18)),
-    radial-gradient(120% 120% at 60% 90%, rgba(255, 77, 77, 0.22), rgba(0, 0, 0, 0.18));
-}
-
-.shopIcon.bomb svg {
-  color: #ff4d4d;
-}
-
-.shopIcon.speed {
-  background: radial-gradient(120% 120% at 30% 20%, rgba(143, 233, 255, 0.22), rgba(0, 0, 0, 0.18)),
-    radial-gradient(120% 120% at 60% 90%, rgba(255, 211, 77, 0.18), rgba(0, 0, 0, 0.18));
-}
-
-.shopIcon.speed svg {
-  color: #8fe9ff;
-}
-
-.shopIcon.lucky {
-  background: radial-gradient(120% 120% at 30% 20%, rgba(176, 123, 255, 0.22), rgba(0, 0, 0, 0.18)),
-    radial-gradient(120% 120% at 60% 90%, rgba(255, 211, 77, 0.18), rgba(0, 0, 0, 0.18));
-}
-
-.shopIcon.lucky svg {
-  color: #b07bff;
+  width: 24px;
+  height: 24px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
 .shopTitle {
-  font-weight: 700;
+  font-weight: 800;
   font-size: 14px;
+  color: var(--ink);
 }
 
 .shopDesc {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.65);
+  color: var(--muted);
 }
 
 .shopOwned {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(44, 33, 24, 0.58);
 }
 
 .shopFoot {
@@ -420,21 +388,21 @@ canvas {
   flex-wrap: wrap;
   gap: 8px;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--muted);
 }
 
 .shopSeed {
-  font-weight: 650;
+  font-weight: 700;
 }
 
 @keyframes warnPulse {
   0%,
   100% {
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35), 0 0 0 rgba(255, 77, 77, 0);
+    box-shadow: 0 8px 16px var(--shadow), 0 0 0 rgba(148, 48, 38, 0);
     transform: translateY(0);
   }
   50% {
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35), 0 0 22px rgba(255, 77, 77, 0.25);
+    box-shadow: 0 8px 16px var(--shadow), 0 0 20px rgba(148, 48, 38, 0.24);
     transform: translateY(-1px);
   }
 }
@@ -454,10 +422,22 @@ canvas {
 @keyframes timePulse {
   0%,
   100% {
-    background: rgba(0, 0, 0, 0.12);
+    background:
+      linear-gradient(rgba(244, 226, 185, 0.86), rgba(218, 186, 128, 0.82)),
+      url("./assets/art/crayon/textures/ui-paper.png") center / 360px 360px repeat;
   }
   50% {
-    background: rgba(255, 77, 77, 0.08);
+    background:
+      linear-gradient(rgba(220, 120, 90, 0.22), rgba(218, 186, 128, 0.82)),
+      url("./assets/art/crayon/textures/ui-paper.png") center / 360px 360px repeat;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn.warning:not(:disabled),
+  .chip.bump,
+  .stat.danger {
+    animation: none;
   }
 }
 
@@ -467,11 +447,14 @@ canvas {
   }
 
   .stats {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(4, minmax(64px, 1fr));
     gap: 8px;
+    width: 100%;
   }
 
   .stat {
-    min-width: 74px;
+    min-width: 0;
   }
 
   .stat .value {

@@ -1697,3 +1697,16 @@ test("game preloads crayon art assets without coupling gameplay state to asset l
     "crayon art preload should start after existing background setup",
   );
 });
+
+test("styles use crayon art textures and keep existing UI selectors", () => {
+  const css = read("styles.css");
+
+  assert.match(css, /--paper:/);
+  assert.match(css, /url\("\.\/assets\/art\/crayon\/textures\/ui-paper\.png"\)/);
+  assert.match(css, /url\("\.\/assets\/art\/crayon\/textures\/paper-grain\.png"\)/);
+  assert.match(css, /\.chip\.bomb \.chipIcon/);
+  assert.match(css, /url\("\.\/assets\/art\/crayon\/icons\/bomb\.png"\)/);
+  assert.match(css, /\.overlay/);
+  assert.match(css, /\.shopItem/);
+  assert.match(css, /border-radius: 8px;/);
+});
